@@ -186,11 +186,10 @@
       return createBreakTile(link);
     }
     const tile = document.createElement('div');
-    tile.className = `tile draggable category-${sanitizeCategory(link.category)}`;
+    tile.className = `tile category-${sanitizeCategory(link.category)}`;
     tile.tabIndex = 0;
     tile.setAttribute('role', 'group');
     tile.dataset.id = link.id;
-    tile.draggable = true;
     const color = getLinkColor(link);
     if (color) {
       tile.style.borderColor = color;
@@ -219,44 +218,14 @@
     // Long-press to edit
     attachLongPress(tile, () => openModalForEdit(link.id));
 
-    // Drag & drop
-    tile.addEventListener('dragstart', (e) => {
-      draggingId = link.id;
-      tile.classList.add('dragging');
-      e.dataTransfer?.setData('text/plain', link.id);
-      // Limit drag image to tile for better UX
-      try { e.dataTransfer?.setDragImage(tile, tile.clientWidth / 2, tile.clientHeight / 2); } catch (_) { /* noop */ }
-    });
-    tile.addEventListener('dragend', () => {
-      draggingId = null;
-      tile.classList.remove('dragging');
-      clearDropHighlights();
-    });
-    tile.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      if (!draggingId || draggingId === link.id) return;
-      tile.classList.add('drop-target');
-    });
-    tile.addEventListener('dragleave', () => {
-      tile.classList.remove('drop-target');
-    });
-    tile.addEventListener('drop', (e) => {
-      e.preventDefault();
-      tile.classList.remove('drop-target');
-      const fromId = draggingId || e.dataTransfer?.getData('text/plain');
-      if (!fromId || fromId === link.id) return;
-      reorderByIds(fromId, link.id);
-    });
-
     return tile;
   }
 
   /** @param {Link} link */
   function createBreakTile(link) {
     const tile = document.createElement('div');
-    tile.className = 'tile break draggable';
+    tile.className = 'tile break';
     tile.dataset.id = link.id;
-    tile.draggable = false;
     tile.setAttribute('role', 'group');
     tile.setAttribute('aria-label', 'Line break');
     attachDragHandle(tile, link);
@@ -272,34 +241,6 @@
           render();
         }
       }
-    });
-
-    // Drag & drop behavior same as normal tiles
-    tile.addEventListener('dragstart', (e) => {
-      draggingId = link.id;
-      tile.classList.add('dragging');
-      e.dataTransfer?.setData('text/plain', link.id);
-      try { e.dataTransfer?.setDragImage(tile, tile.clientWidth / 2, tile.clientHeight / 2); } catch (_) { /* noop */ }
-    });
-    tile.addEventListener('dragend', () => {
-      draggingId = null;
-      tile.classList.remove('dragging');
-      clearDropHighlights();
-    });
-    tile.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      if (!draggingId || draggingId === link.id) return;
-      tile.classList.add('drop-target');
-    });
-    tile.addEventListener('dragleave', () => {
-      tile.classList.remove('drop-target');
-    });
-    tile.addEventListener('drop', (e) => {
-      e.preventDefault();
-      tile.classList.remove('drop-target');
-      const fromId = draggingId || e.dataTransfer?.getData('text/plain');
-      if (!fromId || fromId === link.id) return;
-      reorderByIds(fromId, link.id);
     });
 
     return tile;
@@ -665,12 +606,11 @@
         clearTimer();
       }
     });
-    // Cancel on end/cancel/leave and when native drag starts
+    // Cancel on end/cancel/leave
     el.addEventListener('pointerup', cancel);
     el.addEventListener('pointerleave', cancel);
     el.addEventListener('pointercancel', cancel);
     el.addEventListener('lostpointercapture', cancel);
-    el.addEventListener('dragstart', cancel);
   }
 })();
 
