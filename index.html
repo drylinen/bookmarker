@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Bookmarker</title>
+  <link rel="stylesheet" href="styles.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+  <header class="app-header">
+    <div class="toolbar">
+      <button id="newLinkBtn" class="btn primary" aria-label="Create a new bookmark">Add link</button>
+      <button id="addBreakBtn" class="btn" aria-label="Insert a line break">Add break</button>
+      <button id="helpBtn" class="btn" aria-label="How to use Bookmark'r">Help</button>
+      <button id="resetBtn" class="btn red" aria-label="Reset the board and delete saved Bookmarkr data">Reset</button>
+    </div>
+  </header>
+
+  <main class="app-main" aria-label="Bookmarks">
+    <section id="grid" class="grid" aria-live="polite"></section>
+  </main>
+
+  <div id="modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modalTitle">New link</h2>
+      </div>
+      <div class="modal-body">
+        <form id="linkForm" novalidate>
+          <input type="hidden" id="linkId">
+          <div class="field">
+            <label for="title">Title</label>
+            <input id="title" type="text" placeholder="e.g. Google" required aria-required="true">
+          </div>
+          <div class="field">
+            <label for="url">URL</label>
+            <input id="url" type="url" value="https://www.example.com" required aria-required="true" inputmode="url">
+          </div>
+          <div class="field">
+            <label for="emojiPreset">Emoji preset</label>
+            <select id="emojiPreset"><option value="">Custom</option></select>
+            <label for="emojiCode">Unicode code</label>
+            <div class="appearance-input">
+              <input id="emojiCode" type="text" placeholder="U+1F916" required spellcheck="false" autocapitalize="off" autocomplete="off" aria-describedby="emojiHelp emojiError">
+              <span id="emojiPreview" class="appearance-preview category-icon" role="img" aria-label="Emoji preview" aria-live="polite"></span>
+            </div>
+            <small id="emojiHelp">Use U+1F916 or 1F916. Separate multiple codes with spaces, e.g. U+1F5FA U+FE0F.</small>
+            <small id="emojiError" class="field-error" aria-live="polite"></small>
+          </div>
+          <div class="field">
+            <label for="colorPreset">Border color preset</label>
+            <select id="colorPreset"><option value="">Custom</option></select>
+            <label for="colorCode">Hex color</label>
+            <div class="appearance-input">
+              <input id="colorCode" type="text" placeholder="#8e44ad" required spellcheck="false" autocapitalize="off" autocomplete="off" aria-describedby="colorHelp colorError">
+              <span id="colorPreview" class="appearance-preview color-preview" role="img" aria-label="Color preview" aria-live="polite"></span>
+            </div>
+            <small id="colorHelp">Use a 3- or 6-digit hex color, e.g. #f80 or #ff8800.</small>
+            <small id="colorError" class="field-error" aria-live="polite"></small>
+          </div>
+          <div class="preview">
+            <div class="tile preview-tile" id="previewTile" aria-label="Preview">
+              <a id="previewLink" href="#" target="_blank" rel="noopener noreferrer">
+                <span id="previewIcon" class="category-icon" role="img" aria-label="Category icon"></span>
+              </a>
+              <div id="previewTitle" class="tile-title">Title</div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-actions">
+        <button id="deleteBtn" class="btn red" aria-label="Delete this bookmark" hidden>Delete</button>
+        <div class="spacer"></div>
+        <button id="cancelBtn" class="btn">Cancel</button>
+        <button id="saveBtn" class="btn primary">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="helpModal" class="modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="helpTitle">Using Bookmark'r</h2>
+      </div>
+      <div class="modal-body">
+        <ul>
+          <li>New link: click “Add link,” enter a title and URL, then choose emoji and color presets or type your own Unicode and hex codes. Check the previews, then Save.</li>
+          <li>Edit: long-press a tile to open it for editing or deletion.</li>
+          <li>Reorder: drag a tile’s ⠿ handle with a mouse or finger; the order is saved. With a keyboard, focus the handle and use the arrow keys. Drag near the top or bottom of the screen to scroll.</li>
+          <li>Line breaks: click “Add break” to insert a row separator; drag anywhere on the strip to move it, or long-press to remove it. You can also focus the strip and use the arrow keys.</li>
+          <li>Open links: click the icon on a tile to open in a new tab.</li>
+          <li>Reset: clears the board and deletes Bookmark'r’s saved data in this browser after confirmation.</li>
+        </ul>
+      </div>
+      <div class="modal-actions">
+        <div class="spacer"></div>
+        <button id="helpCloseBtn" class="btn">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="scripts.js"></script>
+</body>
+</html>
+
+
