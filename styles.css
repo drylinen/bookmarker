@@ -197,9 +197,6 @@ html, body {
 .category-ai { border-color: #8e44ad; }
 
 /* Dragging styles */
-.tile.draggable {
-  cursor: grab;
-}
 .tile.dragging {
   opacity: 0.6;
   cursor: grabbing;
