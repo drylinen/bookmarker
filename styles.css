@@ -82,6 +82,10 @@ html, body {
   display: inline-block;
   border-radius: 10px;
   text-decoration: none;
+  /* Prevent Android from showing a callout or trying to drag emoji text on long-press */
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 .category-icon {
   width: 40px;
@@ -92,6 +96,10 @@ html, body {
   font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
   font-size: 32px;
   line-height: 1;
+  /* Prevent Android from trying to drag/copy emoji on long-press */
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 .tile-title {
   text-align: center;
