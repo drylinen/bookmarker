@@ -269,7 +269,7 @@
       tile.appendChild(handle);
     }
     handle.setAttribute('aria-label', `Reorder ${isBreak(link) ? 'line break' : link.title}`);
-    handle.title = breakTile ? 'Drag to reorder, use arrow keys, or hold to remove' : 'Drag to reorder, or use arrow keys';
+    handle.title = breakTile ? 'Tap to remove, drag to reorder, or use arrow keys' : 'Tap to edit, drag to reorder, or use arrow keys';
 
     let pointerId = null;
     let startX = 0;
@@ -342,8 +342,23 @@
       if (e.pointerId !== pointerId) return;
       x = e.clientX;
       y = e.clientY;
-      if (active) updateTarget();
-      finish(true);
+      if (active) {
+        updateTarget();
+        finish(true);
+      } else {
+        // Tap (no drag) — open edit modal for links, confirm-remove for breaks
+        finish(false);
+        if (breakTile) {
+          const idx = links.findIndex((l) => l.id === link.id);
+          if (idx >= 0 && window.confirm('Remove line break?')) {
+            links.splice(idx, 1);
+            saveLinks();
+            render();
+          }
+        } else {
+          openModalForEdit(link.id);
+        }
+      }
     });
     handle.addEventListener('pointercancel', (e) => {
       if (e.pointerId === pointerId) finish(false);
